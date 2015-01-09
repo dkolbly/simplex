@@ -8,7 +8,7 @@ import (
 
 func TestSimplex2(t *testing.T) {
 	r := rand.New(rand.NewSource(101))
-	n := NewSimplex(r)
+	n := New(r)
 	a := n.Noise2(0, 1.25)
 	a0 := 0.0118
 	if math.Abs(a - a0) > 0.00001 {
@@ -19,7 +19,7 @@ func TestSimplex2(t *testing.T) {
 // on my machine (charon) we get about 145 ns/op
 func BenchmarkSimplex(b *testing.B) {
 	r := rand.New(rand.NewSource(101))
-	n := NewSimplex(r)
+	n := New(r)
 
 	x := 0.001
 	y := 0.0001

@@ -37,7 +37,7 @@ import (
 	"math/rand"
 )
 
-func NewSimplex(r *rand.Rand) *Simplex {
+func New(r *rand.Rand) *Simplex {
 	s := &Simplex{}
 	for i := 0; i < len(s.mix); i++ {
 		s.mix[i] = r.Uint32()
