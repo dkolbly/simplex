@@ -137,10 +137,10 @@ func (s *Simplex) Noise2(x, y float64) float64 {
 	h := (x + y) * F2 // Hairy factor for 2D
 	i := fastfloor(x + h)
 	j := fastfloor(y + h)
-	t := fastfloor(float64(i+j) * G2)
+	t := float64(i+j) * G2
 
-	X0 := i - t // Unskew the cell origin back to (x,y) space
-	Y0 := j - t
+	X0 := float64(i) - t // Unskew the cell origin back to (x,y) space
+	Y0 := float64(j) - t
 	x0 := x - float64(X0) // The x,y distances from the cell origin
 	y0 := y - float64(Y0)
 
@@ -210,10 +210,10 @@ func (s *Simplex) Noise3(x, y, z float64) float64 {
 	j := fastfloor(y + h)
 	k := fastfloor(z + h)
 
-	t := fastfloor(float64(i+j+k) * G3)
-	X0 := i - t // Unskew the cell origin back to (x,y,z) space
-	Y0 := j - t
-	Z0 := k - t
+	t := float64(i+j+k) * G3
+	X0 := float64(i) - t // Unskew the cell origin back to (x,y,z) space
+	Y0 := float64(j) - t
+	Z0 := float64(k) - t
 
 	x0 := x - float64(X0) // The x,y,z distances from the cell origin
 	y0 := y - float64(Y0)
@@ -341,11 +341,11 @@ func (s *Simplex) Noise4(x, y, z, w float64) float64 {
 	j := fastfloor(y + h)
 	k := fastfloor(z + h)
 	l := fastfloor(w + h)
-	t := fastfloor(float64(i+j+k+l) * G4) // Factor for 4D unskewing
-	X0 := i - t                           // Unskew the cell origin back to (x,y,z,w) space
-	Y0 := j - t
-	Z0 := k - t
-	W0 := l - t
+	t := float64(i+j+k+l) * G4 // Factor for 4D unskewing
+	X0 := float64(i) - t                           // Unskew the cell origin back to (x,y,z,w) space
+	Y0 := float64(j) - t
+	Z0 := float64(k) - t
+	W0 := float64(l) - t
 	x0 := x - float64(X0) // The x,y,z,w distances from the cell origin
 	y0 := y - float64(Y0)
 	z0 := z - float64(Z0)

@@ -10,9 +10,16 @@ func TestSimplex2(t *testing.T) {
 	r := rand.New(rand.NewSource(101))
 	n := New(r)
 	a := n.Noise2(0, 1.25)
-	a0 := 0.0118
+	a0 := -0.2248
 	if math.Abs(a - a0) > 0.00001 {
 		t.Errorf("Got %.4f, expected %.4f", a, a0)
+	}
+
+	// make sure we get a different answer with a different seed
+	n = New(rand.New(rand.NewSource(102)))
+	a2 := n.Noise2(0, 1.25)
+	if math.Abs(a - a2) < 0.0001 {
+		t.Errorf("got %.4f and %.4f with different seeds", a, a2)
 	}
 }
 
