@@ -111,7 +111,7 @@ var g4 = [...]grad4{
 }
 
 func (s *Simplex) getPerm(k int) int {
-	return int(s.mix[k & 0xff])
+	return int(s.mix[k&0xff])
 }
 
 func (s *Simplex) getPermMod12(k int) int {
@@ -166,8 +166,8 @@ func (s *Simplex) Noise2(x, y float64) float64 {
 	x2 := x0 - 1.0 + 2.0*G2 // Offsets for last corner in (x,y) unskewed coords
 	y2 := y0 - 1.0 + 2.0*G2
 	// Work out the hashed gradient indices of the three simplex corners
-	ii := i & 255;
-	jj := j & 255;
+	ii := i & 255
+	jj := j & 255
 	gi0 := s.getPermMod12(ii + s.getPerm(jj))
 	gi1 := s.getPermMod12(ii + i1 + s.getPerm(jj+j1))
 	gi2 := s.getPermMod12(ii + 1 + s.getPerm(jj+1))
@@ -342,7 +342,7 @@ func (s *Simplex) Noise4(x, y, z, w float64) float64 {
 	k := fastfloor(z + h)
 	l := fastfloor(w + h)
 	t := float64(i+j+k+l) * G4 // Factor for 4D unskewing
-	X0 := float64(i) - t                           // Unskew the cell origin back to (x,y,z,w) space
+	X0 := float64(i) - t       // Unskew the cell origin back to (x,y,z,w) space
 	Y0 := float64(j) - t
 	Z0 := float64(k) - t
 	W0 := float64(l) - t
