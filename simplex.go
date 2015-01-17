@@ -37,10 +37,23 @@ import (
 	"math/rand"
 )
 
+type Simplex struct {
+	// this is a permutation of the numbers 0-255
+	mix [256]uint8
+}
+
 func New(r *rand.Rand) *Simplex {
 	s := &Simplex{}
-	for i := 0; i < len(s.mix); i++ {
-		s.mix[i] = r.Uint32()
+	// initialize it
+	for i := 0; i < 256; i++ {
+		s.mix[i] = uint8(i)
+	}
+	// now randomize the permutation
+	for i := 0; i < 255; i++ {
+		j := r.Int31() & 0xFF
+		if int(j) > i {
+			s.mix[i], s.mix[j] = s.mix[j], s.mix[i]
+		}
 	}
 	return s
 }
@@ -55,10 +68,6 @@ type grad3 struct {
 
 type grad4 struct {
 	dx, dy, dz, dw float64
-}
-
-type Simplex struct {
-	mix [256]uint32
 }
 
 func (g grad3) dot(x, y float64) float64 {
@@ -102,11 +111,7 @@ var g4 = [...]grad4{
 }
 
 func (s *Simplex) getPerm(k int) int {
-	r := s.mix[(k & 0xFF)]
-	r += s.mix[((k>>8)+int(r))&0xFF]
-	r += s.mix[((k>>16)+int(r))&0xFF]
-	r += s.mix[((k>>24)+int(r))&0xFF]
-	return int((r + (r >> 8) + (r >> 16) + (r >> 24)) & 0xFF)
+	return int(s.mix[k & 0xff])
 }
 
 func (s *Simplex) getPermMod12(k int) int {
@@ -161,11 +166,11 @@ func (s *Simplex) Noise2(x, y float64) float64 {
 	x2 := x0 - 1.0 + 2.0*G2 // Offsets for last corner in (x,y) unskewed coords
 	y2 := y0 - 1.0 + 2.0*G2
 	// Work out the hashed gradient indices of the three simplex corners
-	//int ii = i & 255;
-	//int jj = j & 255;
-	gi0 := s.getPermMod12(i + int(s.getPerm(j)))
-	gi1 := s.getPermMod12(i + i1 + int(s.getPerm(j+j1)))
-	gi2 := s.getPermMod12(i + 1 + int(s.getPerm(j+1)))
+	ii := i & 255;
+	jj := j & 255;
+	gi0 := s.getPermMod12(ii + s.getPerm(jj))
+	gi1 := s.getPermMod12(ii + i1 + s.getPerm(jj+j1))
+	gi2 := s.getPermMod12(ii + 1 + s.getPerm(jj+1))
 	// Calculate the contribution from the three corners
 	t0 := 0.5 - x0*x0 - y0*y0
 	var n0 float64
